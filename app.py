@@ -10,7 +10,19 @@ db = SQLAlchemy(app)
 api = Api(app)
 fake = Faker()
 
+# Create a request parser for UserResource
+user_parser = reqparse.RequestParser()
+user_parser.add_argument("name", type=str, required=True, help="Name of the user")
+user_parser.add_argument("email", type=str, required=True, help="Email of the user")
 
+# Create a request parser for UserDetailResource
+detail_parser = reqparse.RequestParser()
+detail_parser.add_argument(
+    "quantity", type=int, required=True, help="Quantity of the order"
+)
+
+
+# Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
@@ -73,6 +85,18 @@ class UserResource(Resource):
             )
         return results
 
+    def post(self):
+        args = user_parser.parse_args()
+        name = args["name"]
+        email = args["email"]
+
+        # Create a new user
+        user = User(name=name, email=email)
+        db.session.add(user)
+        db.session.commit()
+
+        return {"message": "User created successfully"}, 201
+
 
 class UserDetailResource(Resource):
     def get(self, user_id):
@@ -89,31 +113,22 @@ class UserDetailResource(Resource):
 
         return {"id": user.id, "name": user.name, "email": user.email, "orders": orders}
 
+    def post(self, user_id):
+        args = detail_parser.parse_args()
+        quantity = args["quantity"]
+
+        # Create a new order
+        order = Order(
+            user_id=user_id, item_id=1, quantity=quantity
+        )  # Assuming item_id 1 for simplicity
+        db.session.add(order)
+        db.session.commit()
+
+        return {"message": "Order created successfully"}, 201
+
 
 api.add_resource(UserResource, "/users")
 api.add_resource(UserDetailResource, "/users/<int:user_id>")
-
-
-class ItemResource(Resource):
-    def get(self):
-        items = Item.query.all()
-        results = []
-        for item in items:
-            results.append({"id": item.id, "name": item.name, "price": item.price})
-        return results
-
-
-class ItemDetailResource(Resource):
-    def get(self, item_id):
-        item = Item.query.get(item_id)
-        if not item:
-            return {"error": "Item not found"}, 404
-
-        return {"id": item.id, "name": item.name, "price": item.price}
-
-
-api.add_resource(ItemResource, "/items")
-api.add_resource(ItemDetailResource, "/items/<int:item_id>")
 
 
 if __name__ == "__main__":
