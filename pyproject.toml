@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "ashfirst"
+version = "0.1.0"
+description = ""
+authors = ["ASHFAQ ISSAK <ashfaq.abdi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+requests = "^2.26.0"
+sqlalchemy = "^2.0.17"
+alembic = "^1.11.1"
+flask = "^2.3.2"
+flask-sqlalchemy = "^3.0.5"
+faker = "^18.11.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
