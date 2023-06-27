@@ -14,6 +14,7 @@ alembic = "^1.11.1"
 flask = "^2.3.2"
 flask-sqlalchemy = "^3.0.5"
 faker = "^18.11.1"
+flask-restful = "^0.3.10"
 
 
 [build-system]
