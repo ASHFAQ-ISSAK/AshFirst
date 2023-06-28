@@ -4,7 +4,8 @@ The E-Commerce API is a RESTful web service that allows users to manage users, i
 Technologies Used
 Python
 Flask
-Flask SQLAlch<|endoftext|>
+Flask SQLAlchemy
+
 
 Description:
 The API allows you to perform CRUD (Create, Read, Update, Delete) operations on users and items in the e-commerce system. Users can place orders for items, and you can retrieve information about users, items, and their respective orders.
